@@ -186,7 +186,7 @@
         <h1>CERTIFICATE OF LOVE</h1>
         <div class="subtitle">An Unbreakable 3D Eternal Bond</div>
         <div class="instruction">✨ Touch & Swipe to Spin Our Memories ✨</div>
-        <div class="names" id="dynamicName">You & Someone Special</div>
+        <div class="names" id="dynamicName">Devan & Someone Special</div>
         <div class="counter-box">
             <div id="timer">Loading our beautiful time...</div>
         </div>
@@ -200,7 +200,8 @@
             const enteredName = inputField.value.trim();
             const finalName = enteredName !== "" ? enteredName : "Malavika";
             
-            document.getElementById('dynamicName').innerHTML = `You & ${finalName}`;
+            // CHANGED: Outputs your explicit name instead of generic text
+            document.getElementById('dynamicName').innerHTML = `Devan & ${finalName}`;
             
             const welcomeBox = document.getElementById('welcome-box');
             welcomeBox.style.opacity = '0';
@@ -241,10 +242,9 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         } catch (e) {
-            console.error("WebGL initialization failed.");
+            console.error("WebGL error.");
         }
 
-        // Backup elegant rose-gold material
         const backupMaterial = new THREE.MeshStandardMaterial({
             color: 0xff4d6d,
             roughness: 0.2,
@@ -255,7 +255,6 @@
         let memoryCube = new THREE.Mesh(cubeGeometry, backupMaterial);
         scene.add(memoryCube);
 
-        // Flexible Path Multi-Loader Loop
         const textureLoader = new THREE.TextureLoader();
         const pathsToTry = [
             '2005.jpeg',
@@ -269,7 +268,6 @@
 
             textureLoader.load(pathsToTry[index], 
                 function(texture) {
-                    // Success! Switch material to the image mapping
                     memoryCube.material = new THREE.MeshStandardMaterial({
                         map: texture,
                         roughness: 0.1,
@@ -279,7 +277,6 @@
                 },
                 undefined,
                 function(err) {
-                    // Try next path down the list if this one hits an error
                     tryLoadTexture(index + 1);
                 }
             );
@@ -287,7 +284,7 @@
         
         tryLoadTexture(0);
 
-        // Background Particle System
+        // Particle System
         const particleCount = 150;
         const particleGeometry = new THREE.BufferGeometry();
         const positions = new Float32Array(particleCount * 3);
@@ -317,14 +314,12 @@
         const starField = new THREE.Points(particleGeometry, particleMaterial);
         scene.add(starField);
 
-        // Lighting System Array
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
         scene.add(ambientLight);
         const pointLight1 = new THREE.PointLight(0xff4d6d, 2, 10);
         pointLight1.position.set(2, 3, 2);
         scene.add(pointLight1);
 
-        // Touch Control Overrides
         let isDragging = false;
         let previousTouchX = 0, previousTouchY = 0;
 
