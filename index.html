@@ -20,7 +20,6 @@
             position: relative;
         }
 
-        /* 3D Canvas Viewport */
         #canvas3d {
             position: absolute;
             top: 0;
@@ -30,7 +29,6 @@
             z-index: 1;
         }
 
-        /* NEW: Front Title Welcome Screen Box */
         #welcome-box {
             position: fixed;
             top: 0;
@@ -98,14 +96,8 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
-            transition: transform 0.2s;
         }
 
-        .welcome-card button:active {
-            transform: scale(0.95);
-        }
-
-        /* Floating Overlay Card inside the project */
         .overlay-content {
             position: absolute;
             bottom: 40px;
@@ -122,12 +114,11 @@
             padding: 20px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(255, 77, 109, 0.3);
-            opacity: 0; /* Hidden initially until unlocked */
+            opacity: 0; 
             transition: opacity 1s ease 0.5s;
             pointer-events: none;
         }
 
-        /* Show the main content after entering name */
         body.unlocked .overlay-content {
             opacity: 1;
             pointer-events: auto;
@@ -148,13 +139,11 @@
             margin-bottom: 12px;
         }
 
-        /* Dynamic Name Display Target */
         .names {
             font-size: 1.3rem;
             font-weight: bold;
             color: #ff4d6d;
             margin: 8px 0;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
         .instruction {
@@ -164,13 +153,6 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 10px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
         }
 
         .counter-box {
@@ -184,13 +166,11 @@
             font-size: 1.1rem;
             font-weight: bold;
             color: #590d22;
-            letter-spacing: 0.5px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Front Entrance Screen -->
     <div id="welcome-box">
         <div class="welcome-card">
             <h2>Welcome, Beautiful ✨</h2>
@@ -200,74 +180,55 @@
         </div>
     </div>
 
-    <!-- 3D Viewport -->
     <canvas id="canvas3d"></canvas>
 
-    <!-- Main Project Content Interface -->
     <div class="overlay-content">
         <h1>CERTIFICATE OF LOVE</h1>
         <div class="subtitle">An Unbreakable 3D Eternal Bond</div>
-        
         <div class="instruction">✨ Touch & Swipe to Spin Our Memories ✨</div>
-
-        <!-- The name changes here dynamically based on what she types -->
         <div class="names" id="dynamicName">You & Someone Special</div>
-        
         <div class="counter-box">
             <div id="timer">Loading our beautiful time...</div>
         </div>
     </div>
 
-    <!-- External Script Modules -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
-        // INPUT CONTROLLER LOGIC
         function unlockProject() {
             const inputField = document.getElementById('nameInput');
             const enteredName = inputField.value.trim();
-            
-            // Default back to Malavika if she leaves it empty
             const finalName = enteredName !== "" ? enteredName : "Malavika";
             
-            // Inject her name right into the certificate layout
-            document.getElementById('dynamicName').innerHTML = You & ${finalName};
+            document.getElementById('dynamicName').innerHTML = `You & ${finalName}`;
             
-            // Fade out the entry screen box smoothly
             const welcomeBox = document.getElementById('welcome-box');
             welcomeBox.style.opacity = '0';
             welcomeBox.style.visibility = 'hidden';
             
-            // Activate the overlay animation fade-in trigger
             document.body.classList.add('unlocked');
         }
 
-        // Add 'Enter' key support inside text field box
         document.getElementById('nameInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                unlockProject();
-            }
+            if (e.key === 'Enter') unlockProject();
         });
 
-        // RELATIONSHIP COUNTER SETUP
+        // Anniversary Setup
         const anniversaryDate = new Date(2025, 9, 25, 0, 0, 0); 
 
         function updateTimer() {
             const now = new Date();
             const difference = now - anniversaryDate;
-
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
             const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-            document.getElementById('timer').innerHTML = 
-                ${days}d ${hours}h ${minutes}m ${seconds}s;
+            document.getElementById('timer').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
         }
         updateTimer();
         setInterval(updateTimer, 1000);
 
-        // --- THREE.JS 3D ENGINE RENDERING PIPELINE ---
+        // --- 3D ENGINE ---
         const canvas = document.getElementById('canvas3d');
         const scene = new THREE.Scene();
         
@@ -278,11 +239,9 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+        // FIXED: Loading image locally from your repository folder to prevent cross-origin errors
         const textureLoader = new THREE.TextureLoader();
-        textureLoader.crossOrigin = "Anonymous"; 
-        
-        // Directly mapped to your hosted image asset URL
-        const yourPhotoTexture = textureLoader.load('https://i.ibb.co/kgNSGPzv/1000006579.jpg');
+        const yourPhotoTexture = textureLoader.load('1000006579.jpg');
 
         const cubeGeometry = new THREE.BoxGeometry(1.6, 1.6, 1.6);
         const cubeMaterial = new THREE.MeshStandardMaterial({
@@ -295,17 +254,15 @@
         const memoryCube = new THREE.Mesh(cubeGeometry, cubeMaterial);
         scene.add(memoryCube);
 
-        // Particle background stars creation logic
+        // Background Star Particle Engine
         const particleCount = 150;
         const particleGeometry = new THREE.BufferGeometry();
         const positions = new Float32Array(particleCount * 3);
-
         for(let i=0; i<particleCount*3; i+=3) {
             positions[i] = (Math.random() - 0.5) * 10;  
             positions[i+1] = (Math.random() - 0.5) * 10;
             positions[i+2] = (Math.random() - 0.5) * 10;
         }
-
         particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
         const pCanvas = document.createElement('canvas');
@@ -324,60 +281,33 @@
             blending: THREE.AdditiveBlending,
             depthWrite: false
         });
-
         const starField = new THREE.Points(particleGeometry, particleMaterial);
         scene.add(starField);
 
-        // Light Rigging Setup Matrix
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
         scene.add(ambientLight);
-
         const pointLight1 = new THREE.PointLight(0xff4d6d, 2, 10);
         pointLight1.position.set(2, 3, 2);
         scene.add(pointLight1);
 
-        const pointLight2 = new THREE.PointLight(0xc7923e, 1.5, 10);
-        pointLight2.position.set(-2, -3, 2);
-        scene.add(pointLight2);
-
-        // MOBILE INTERACTIVE EVENT DRAG OVERRIDES
+        // Touch Interaction mechanics
         let isDragging = false;
-        let previousTouchX = 0;
-        let previousTouchY = 0;
+        let previousTouchX = 0, previousTouchY = 0;
 
         window.addEventListener('touchstart', (e) => {
             isDragging = true;
-            previousTouchX = e.touches[0].clientX;
-            previousTouchY = e.touches[0].clientY;
+            previousTouchX = e.touches[0].clientX; previousTouchY = e.touches[0].clientY;
         }, { passive: true });
-
         window.addEventListener('touchmove', (e) => {
             if (!isDragging) return;
             const deltaX = e.touches[0].clientX - previousTouchX;
             const deltaY = e.touches[0].clientY - previousTouchY;
-
             memoryCube.rotation.y += deltaX * 0.01;
             memoryCube.rotation.x += deltaY * 0.01;
-
-            previousTouchX = e.touches[0].clientX;
-            previousTouchY = e.touches[0].clientY;
+            previousTouchX = e.touches[0].clientX; previousTouchY = e.touches[0].clientY;
         }, { passive: true });
-
         window.addEventListener('touchend', () => { isDragging = false; });
-
-        window.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            previousTouchX = e.clientX; previousTouchY = e.clientY;
-        });
-        window.addEventListener('mousemove', (e) => {
-            if(!isDragging) return;
-            const deltaX = e.clientX - previousTouchX;
-            const deltaY = e.clientY - previousTouchY;
-            memoryCube.rotation.y += deltaX * 0.007;
-            memoryCube.rotation.x += deltaY * 0.007;
-            previousTouchX = e.clientX; previousTouchY = e.clientY;
-        });
-        window.addEventListener('mouseup', () => { isDragging = false; });
 
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
@@ -385,24 +315,17 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // ANIMATION RUNTIME SYSTEM TICK
         const clock = new THREE.Clock();
-
         function tick() {
             const elapsedTime = clock.getElapsedTime();
-
             if (!isDragging) {
                 memoryCube.rotation.y += 0.005;
                 memoryCube.rotation.x += 0.003;
             }
-
             starField.rotation.y = elapsedTime * 0.03;
-            starField.rotation.x = elapsedTime * 0.01;
-
             renderer.render(scene, camera);
             window.requestAnimationFrame(tick);
         }
-
         tick();
     </script>
 </body>
