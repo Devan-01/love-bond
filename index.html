@@ -239,9 +239,9 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // FIXED: Loading image locally from your repository folder to prevent cross-origin errors
+        // FIXED: Pointing directly to your uploaded 2005.jpeg asset folder coordinates
         const textureLoader = new THREE.TextureLoader();
-        const yourPhotoTexture = textureLoader.load('1000006579.jpg');
+        const yourPhotoTexture = textureLoader.load('2005.jpeg');
 
         const cubeGeometry = new THREE.BoxGeometry(1.6, 1.6, 1.6);
         const cubeMaterial = new THREE.MeshStandardMaterial({
